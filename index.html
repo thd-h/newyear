@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>🎊 新年快乐 🎊</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  html, body {
+    height:100%;
+    overflow:hidden;
+    font-family:'PingFang SC','Microsoft YaHei',system-ui,sans-serif;
+    background: radial-gradient(circle at 50% 20%, #7a0d0d, #3d0505 70%, #1a0101);
+    color:#fff;
+    user-select:none;
+  }
+
+  /* 星空背景 */
+  .stars {
+    position:fixed; inset:0;
+    pointer-events:none;
+  }
+  .star {
+    position:absolute;
+    width:3px; height:3px;
+    background:#ffd966;
+    border-radius:50%;
+    opacity:.7;
+    animation: twinkle 2s infinite alternate;
+  }
+  @keyframes twinkle {
+    from { opacity:.2; transform:scale(.6);}
+    to   { opacity:1;  transform:scale(1.2);}
+  }
+
+  /* 主容器 */
+  .stage {
+    position:relative;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px 20px;
+    z-index:5;
+    text-align:center;
+  }
+
+  /* 灯笼 */
+  .lantern {
+    font-size:56px;
+    animation: swing 3s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 14px #ff4d4d);
+    margin-bottom:6px;
+  }
+  @keyframes swing {
+    from { transform:rotate(-6deg) translateY(0);}
+    to   { transform:rotate(6deg) translateY(-6px);}
+  }
+
+  /* 标题 */
+  .title {
+    font-size:42px;
+    font-weight:900;
+    letter-spacing:4px;
+    color:#ffe066;
+    text-shadow: 0 0 12px #ff3b3b, 0 0 24px #ff0000, 3px 3px 0 #7a0000;
+    margin:8px 0 6px;
+    animation: glow 1.6s ease-in-out infinite alternate;
+  }
+  @keyframes glow {
+    from { text-shadow:0 0 10px #ff3b3b, 0 0 20px #ff0000, 3px 3px 0 #7a0000;}
+    to   { text-shadow:0 0 22px #ffd966, 0 0 44px #ff0000, 3px 3px 0 #7a0000;}
+  }
+
+  .subtitle {
+    font-size:15px;
+    color:#ffd9a0;
+    letter-spacing:2px;
+    margin-bottom:22px;
+    opacity:.9;
+  }
+
+  /* 祝福卡片 */
+  .card {
+    width:100%;
+    max-width:340px;
+    background: linear-gradient(160deg, rgba(255,220,150,.16), rgba(255,80,80,.10));
+    border:2px solid rgba(255,209,102,.55);
+    border-radius:22px;
+    padding:22px 18px;
+    box-shadow: 0 0 26px rgba(255,80,80,.45), inset 0 0 18px rgba(255,209,102,.18);
+    backdrop-filter: blur(4px);
+    margin-bottom:22px;
+  }
+
+  .line {
+    font-size:19px;
+    line-height:1.9;
+    color:#ffefc2;
+    opacity:0;
+    transform:translateY(14px);
+    animation: fadeUp .8s forwards;
+  }
+  .line:nth-child(1){ animation-delay:.4s; }
+  .line:nth-child(2){ animation-delay:1.1s; }
+  .line:nth-child(3){ animation-delay:1.8s; }
+  .line:nth-child(4){ animation-delay:2.5s; color:#ffd966; font-weight:700; font-size:22px;}
+  @keyframes fadeUp {
+    to { opacity:1; transform:translateY(0);}
+  }
+
+  /* 按钮 */
+  .btn {
+    display:inline-block;
+    padding:15px 42px;
+    font-size:19px;
+    font-weight:800;
+    letter-spacing:2px;
+    color:#7a0d0d;
+    background: linear-gradient(180deg, #ffe680, #ffb733);
+    border:none;
+    border-radius:50px;
+    box-shadow: 0 6px 0 #b36b00, 0 0 22px rgba(255,200,80,.85);
+    cursor:pointer;
+    transition: transform .12s, box-shadow .12s;
+    animation: breathe 1.8s ease-in-out infinite alternate;
+  }
+  .btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #b36b00, 0 0 14px rgba(255,200,80,.7);
+  }
+  @keyframes breathe {
+    from { box-shadow:0 6px 0 #b36b00, 0 0 14px rgba(255,200,80,.6);}
+    to   { box-shadow:0 6px 0 #b36b00, 0 0 32px rgba(255,220,120,1);}
+  }
+
+  /* 彩蛋祝福（点击后出现） */
+  .bless {
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition: max-height .8s ease, opacity .8s ease, margin .5s;
+    margin-top:0;
+    font-size:17px;
+    line-height:2;
+    color:#ffe9a8;
+  }
+  .bless.show {
+    max-height:300px;
+    opacity:1;
+    margin-top:18px;
+  }
+  .bless .big {
+    display:block;
+    font-size:26px;
+    font-weight:900;
+    color:#ffd966;
+    margin-bottom:6px;
+    text-shadow:0 0 12px #ff3b3b;
+  }
+
+  /* 烟花容器 */
+  .fireworks {
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:1;
+  }
+  .fw {
+    position:absolute;
+    width:6px; height:6px;
+    border-radius:50%;
+    animation: burst 1.1s ease-out forwards;
+  }
+  @keyframes burst {
+    0%   { opacity:1; transform:translate(0,0) scale(1);}
+    100% { opacity:0; transform:translate(var(--x), var(--y)) scale(0);}
+  }
+
+  /* 漂浮祝福 */
+  .float-emoji {
+    position:fixed;
+    font-size:26px;
+    animation: floatUp 4s linear forwards;
+    pointer-events:none;
+    z-index:2;
+  }
+  @keyframes floatUp {
+    0%   { opacity:0; transform:translateY(0) scale(.6);}
+    20%  { opacity:1;}
+    100% { opacity:0; transform:translateY(-90vh) scale(1.3) rotate(20deg);}
+  }
+
+  .footer {
+    font-size:13px;
+    color:#ffb3b3;
+    opacity:.7;
+    margin-top:6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- 星空 -->
+<div class="stars" id="stars"></div>
+<!-- 烟花层 -->
+<div class="fireworks" id="fireworks"></div>
+
+<div class="stage">
+  <div class="lantern">🏮</div>
+  <h1 class="title">新年快乐</h1>
+  <div class="subtitle">HAPPY NEW YEAR · 2026</div>
+
+  <div class="card">
+    <div class="line">爆竹声中一岁除</div>
+    <div class="line">春风送暖入屠苏</div>
+    <div class="line">愿新的一年，所求皆如愿</div>
+    <div class="line">新年快乐，万事胜意！</div>
+  </div>
+
+  <button class="btn" id="btn">🧧 接收新年好运 🧧</button>
+
+  <div class="bless" id="bless">
+    <span class="big">🎉 恭喜你，好运已签收 🎉</span>
+    岁岁常欢愉，年年皆胜意<br>
+    多喜乐，长安宁，岁无忧<br>
+    🏮 恭喜发财，红包拿来 🏮
+  </div>
+
+  <div class="footer">— 点开这份祝福，新年一路生花 —</div>
+</div>
+
+<script>
+(function(){
+  // ===== 星空 =====
+  const starsBox = document.getElementById('stars');
+  for (let i=0;i<60;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random()*100 + '%';
+    s.style.top  = Math.random()*100 + '%';
+    s.style.animationDelay = (Math.random()*2) + 's';
+    s.style.animationDuration = (1.2 + Math.random()*1.8) + 's';
+    starsBox.appendChild(s);
+  }
+
+  // ===== 烟花 =====
+  const fwBox = document.getElementById('fireworks');
+  function launchFirework(x, y){
+    const colors = ['#ff4d4d','#ffd966','#ff9933','#ff6699','#ffeb3b','#ff3300'];
+    const count = 26;
+    for (let i=0;i<count;i++){
+      const p = document.createElement('div');
+      p.className = 'fw';
+      const size = Math.random()*6 + 4;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = x + 'px';
+      p.style.top  = y + 'px';
+      p.style.background = colors[Math.floor(Math.random()*colors.length)];
+      p.style.boxShadow = '0 0 10px currentColor';
+      const angle = Math.random()*Math.PI*2;
+      const dist  = Math.random()*130 + 50;
+      p.style.setProperty('--x', Math.cos(angle)*dist + 'px');
+      p.style.setProperty('--y', Math.sin(angle)*dist + 'px');
+      fwBox.appendChild(p);
+      setTimeout(()=>p.remove(), 1150);
+    }
+  }
+
+  // ===== 漂浮祝福 =====
+  function floatEmoji(){
+    const emojis = ['🏮','🎇','🎆','✨','🧧','🎊','🎉','💛'];
+    const e = document.createElement('div');
+    e.className = 'float-emoji';
+    e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left = Math.random()*90 + 'vw';
+    e.style.top  = '100vh';
+    e.style.animationDuration = (3 + Math.random()*2) + 's';
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(), 5000);
+  }
+  // 页面打开时自动放几朵烟花
+  setTimeout(()=>launchFirework(window.innerWidth*0.5, window.innerHeight*0.4), 500);
+  setTimeout(()=>launchFirework(window.innerWidth*0.3, window.innerHeight*0.3), 1100);
+  setTimeout(()=>launchFirework(window.innerWidth*0.7, window.innerHeight*0.5), 1700);
+  // 持续飘落祝福
+  setInterval(floatEmoji, 700);
+
+  // ===== 按钮交互 =====
+  const btn = document.getElementById('btn');
+  const bless = document.getElementById('bless');
+  let opened = false;
+
+  function handleOpen(e){
+    // 烟花
+    const rect = btn.getBoundingClientRect();
+    const cx = rect.left + rect.width/2;
+    const cy = rect.top  + rect.height/2;
+    launchFirework(cx, cy);
+    // 手机震动
+    if (navigator.vibrate) navigator.vibrate(30);
+
+    if (!opened){
+      opened = true;
+      bless.classList.add('show');
+      btn.textContent = '🎊 新年快乐，好运连连 🎊';
+      // 追加几朵烟花
+      setTimeout(()=>launchFirework(window.innerWidth*0.2, window.innerHeight*0.35), 250);
+      setTimeout(()=>launchFirework(window.innerWidth*0.8, window.innerHeight*0.45), 450);
+    }
+  }
+
+  // 同时支持触摸和点击，避免重复触发
+  let touched = false;
+  btn.addEventListener('touchstart', (e)=>{
+    e.preventDefault();
+    touched = true;
+    handleOpen(e);
+    setTimeout(()=>touched=false, 300);
+  }, {passive:false});
+
+  btn.addEventListener('click', (e)=>{
+    if (touched) return;
+    handleOpen(e);
+  });
+
+  // 双击不缩放
+  document.addEventListener('dblclick', e=>e.preventDefault(), {passive:false});
+})();
+</script>
+</body>
+</html>
